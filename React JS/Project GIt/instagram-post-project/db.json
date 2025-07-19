@@ -1,0 +1,34 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Yash Ghodasara",
+      "email": "yash@gmail.com",
+      "password": "1234"
+    },
+    {
+      "id": "b936",
+      "name": "Abhi Dthaniya",
+      "email": "abhi@gmail.com",
+      "password": "123456"
+    },
+    {
+      "id": "a299",
+      "name": "Srujan Delwadiya ",
+      "email": "srujan@gmail.com",
+      "password": "123456"
+    }
+  ],
+  "posts": [
+    {
+      "id": "1",
+      "userId": 1,
+      "title": "My First Post",
+      "description": "This is a sample post from JSON server.",
+      "likes": 10,
+      "comments": [],
+      "shares": 2,
+      "createdAt": "2025-07-14T12:00:00Z"
+    }
+  ]
+}
