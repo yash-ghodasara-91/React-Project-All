@@ -2,10 +2,19 @@ import React, { useEffect, useState } from 'react'
 import axios from "axios";
 
 export default function JsonApi() {
-  const [record, setRecord] = useState([]);
-  const [name, setName] = useState("")
-  const [subject, setSubject] = useState("")
+  const [formData, setFormData] = useState({
+    name: "",
+    subject: ""
+  })
+  const [record, setRecord] = useState([])
   const [editIndex, setEditIndex] = useState(null)
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+  }
 
   useEffect(() => {
     fetchApi()
@@ -17,53 +26,64 @@ export default function JsonApi() {
     })
   }
 
-  const handleAddData = async () => {
+  const handleAddData = async (e) => {
+    e.preventDefault();
+
     if (editIndex == null) {
-      await axios.post("http://localhost:1008/users", { name, subject }).then((res) => {
-        setRecord([...record, { name, subject }])
+      await axios.post("http://localhost:1008/users", formData).then((res) => {
+        setRecord([...record, res.data])
       })
     } else {
-      await axios.put(`http://localhost:1008/users/${editIndex}`, { name, subject }).then((res) => {
-        const updateData = record.find((item)=>item.id == editIndex, {name,subject})
+      await axios.put(`http://localhost:1008/users/${editIndex}`, formData).then((res) => {
+        let singleData = record.find((item) => item.id == editIndex)
+        singleData.name = formData.name,
+          singleData.subject = formData.subject
+        setRecord(record)
       })
     }
-
-    setName("")
-    setSubject("")
     setEditIndex(null)
+    setFormData({
+      name: "",
+      subject: ""
+    })
   }
 
   const handleDelete = async (id) => {
     await axios.delete(`http://localhost:1008/users/${id}`).then((res) => {
-      let newRecord = record.filter((item) => item.id != id)
-      setRecord(newRecord)
+      let newData = record.filter((item) => item.id != id)
+      setRecord(newData)
     })
   }
 
   const handleEdit = (id) => {
     let singleData = record.find((item) => item.id == id)
-    setName(singleData.name);
-    setSubject(singleData.subject)
+    setFormData({
+      name: singleData.name,
+      subject: singleData.subject
+    })
     setEditIndex(id)
   }
 
   return (
     <div>
-      <h1>Api</h1>
+      <h1>JsonApi</h1>
 
-      <input type="text" placeholder='Enter ypur name' onChange={(e) => setName(e.target.value)} value={name} />
-      <input type="text" placeholder='Enter ypur subject' onChange={(e) => setSubject(e.target.value)} value={subject} />
+      <form onSubmit={handleAddData}>
+        <input type="text" placeholder='Enter your name' name='name' value={formData.name} onChange={handleChange} />
+        <input type="text" placeholder='Enter your subject' name='subject' value={formData.subject} onChange={handleChange} />
 
-      <button onClick={handleAddData}>{editIndex == null ? "Add Data" : "Update Data"}</button>
+        <button type='submit'>{editIndex == null ? "Add Data" : "Update Data"}</button>
+      </form>
 
       {
         record &&
         record.map((e, i) => {
           return <ul key={i}>
+            <li>{i + 1}</li>
             <li>{e.name}</li>
             <li>{e.subject}</li>
 
-            <button onClick={()=>handleEdit(e.id)}>Edit</button>
+            <button onClick={() => handleEdit(e.id)}>Edit</button>
             <button onClick={() => handleDelete(e.id)}>Delete</button>
           </ul>
         })

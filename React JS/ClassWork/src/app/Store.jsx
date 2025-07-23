@@ -1,11 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import  counterSlice  from "../features/CounterSlices";
-import  TodoSlice  from "../features/TodoSlice";
-
+import  Todoslice  from "../features/TodoSlice";
+import  ApiSlice  from "../features/ApiSlice";
 
 export const store = configureStore({
     reducer : {
-        counterkey : counterSlice,
-        todoKey : TodoSlice
+        todokey : Todoslice,
+        apikey : ApiSlice
     }
 })
