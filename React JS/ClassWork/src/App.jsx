@@ -40,3 +40,24 @@
 // }
 
 // export default App
+
+import React from 'react'
+import SignUp from './Firebase/SignUp'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Desboard from './Firebase/Desboard'
+import Login from './Firebase/Login'
+
+export default function App() {
+  return (
+    <div>
+      <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<SignUp />}></Route>
+        <Route path='/login' element={<Login />}></Route>
+        <Route path='/desboard' element={<Desboard />}></Route>
+      </Routes>
+      </BrowserRouter>
+    </div>
+  )
+}
+
